@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model appointments {
+  AppointmentId   Int             @id @default(autoincrement())
+  AppointmentDate DateTime        @db.DateTime(0)
+  PatientId       Int
+  DoctorId        Int
+  StatusId        Int
+  CreatedAt       DateTime?       @default(now()) @db.DateTime(0)
+  UpdatedAt       DateTime?       @default(now()) @db.DateTime(0)
+  patients        patients        @relation(fields: [PatientId], references: [PatientId], onUpdate: Restrict, map: "appointments_ibfk_1")
+  doctors         doctors         @relation(fields: [DoctorId], references: [DoctorId], onUpdate: Restrict, map: "appointments_ibfk_2")
+  status          status          @relation(fields: [StatusId], references: [StatusId], onUpdate: Restrict, map: "appointments_ibfk_3")
+  consultations   consultations[]
+
+  @@index([DoctorId], map: "DoctorId")
+  @@index([PatientId], map: "PatientId")
+  @@index([StatusId], map: "StatusId")
+}
+
+model attachments {
+  AttachmentId   Int           @id @default(autoincrement())
+  ConsultationId Int
+  FilePath       String?       @db.VarChar(255)
+  FileType       String?       @db.VarChar(50)
+  CreatedAt      DateTime?     @default(now()) @db.DateTime(0)
+  UploadedAt     DateTime?     @default(now()) @db.DateTime(0)
+  consultations  consultations @relation(fields: [ConsultationId], references: [ConsultationId], onUpdate: Restrict, map: "attachments_ibfk_1")
+
+  @@index([ConsultationId], map: "ConsultationId")
+}
+
+model consultations {
+  ConsultationId Int           @id @default(autoincrement())
+  AppointmentId  Int
+  Description    String?       @db.Text
+  Diagnosis      String?       @db.Text
+  Prescription   String?       @db.Text
+  CreatedAt      DateTime?     @default(now()) @db.DateTime(0)
+  UpdatedAt      DateTime?     @default(now()) @db.DateTime(0)
+  attachments    attachments[]
+  appointments   appointments  @relation(fields: [AppointmentId], references: [AppointmentId], onUpdate: Restrict, map: "consultations_ibfk_1")
+
+  @@index([AppointmentId], map: "AppointmentId")
+}
+
+model doctors {
+  DoctorId     Int            @id @default(autoincrement())
+  Name         String         @db.VarChar(100)
+  Specialty    String?        @db.VarChar(100)
+  BirthDate    DateTime?      @db.Date
+  Email        String?        @db.VarChar(100)
+  Phone        String?        @db.VarChar(20)
+  CRM          String         @unique(map: "CRM") @db.VarChar(20)
+  UserId       Int
+  CreatedAt    DateTime?      @default(now()) @db.DateTime(0)
+  UpdatedAt    DateTime?      @default(now()) @db.DateTime(0)
+  appointments appointments[]
+  users        users          @relation(fields: [UserId], references: [UserId], onUpdate: Restrict, map: "doctors_ibfk_1")
+
+  @@index([UserId], map: "UserId")
+}
+
+model patients {
+  PatientId    Int            @id @default(autoincrement())
+  Name         String         @db.VarChar(100)
+  Document     String         @unique(map: "Document") @db.Char(11)
+  BirthDate    DateTime?      @db.Date
+  Gender       Boolean?
+  Phone        String?        @db.VarChar(20)
+  UserId       Int
+  CreatedAt    DateTime?      @default(now()) @db.DateTime(0)
+  UpdatedAt    DateTime?      @default(now()) @db.DateTime(0)
+  appointments appointments[]
+  users        users          @relation(fields: [UserId], references: [UserId], onUpdate: Restrict, map: "patients_ibfk_1")
+
+  @@index([UserId], map: "UserId")
+}
+
+model status {
+  StatusId     Int            @id @default(autoincrement())
+  Name         String         @db.VarChar(50)
+  appointments appointments[]
+  users        users[]
+}
+
+model users {
+  UserId       Int        @id @default(autoincrement())
+  PasswordHash String     @db.VarChar(255)
+  UserTypeId   Int
+  StatusId     Int
+  CreatedAt    DateTime?  @default(now()) @db.DateTime(0)
+  UpdatedAt    DateTime?  @default(now()) @db.DateTime(0)
+  doctors      doctors[]
+  patients     patients[]
+  usertypes    usertypes  @relation(fields: [UserTypeId], references: [UserTypeId], onUpdate: Restrict, map: "users_ibfk_1")
+  status       status     @relation(fields: [StatusId], references: [StatusId], onUpdate: Restrict, map: "users_ibfk_2")
+
+  @@index([StatusId], map: "StatusId")
+  @@index([UserTypeId], map: "UserTypeId")
+}
+
+model usertypes {
+  UserTypeId Int     @id @default(autoincrement())
+  Name       String  @db.VarChar(50)
+  users      users[]
+}
