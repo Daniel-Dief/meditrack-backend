@@ -1,7 +1,5 @@
 # 🏥 API de Agendamentos Médicos - GraphQL
 
-Este projeto é uma API construída com **Node.js**, **TypeScript**, **Prisma** e **GraphQL (Apollo Server)** para gerenciar o agendamento de consultas entre médicos e pacientes.
-
 ## 🚀 Tecnologias
 
 - ![Node.js](https://img.shields.io/badge/-Node.js-339933?logo=node.js&logoColor=white&style=flat-square) **Node.js**
@@ -11,7 +9,13 @@ Este projeto é uma API construída com **Node.js**, **TypeScript**, **Prisma** 
 - ![Prisma](https://img.shields.io/badge/-Prisma-2D3748?logo=prisma&logoColor=white&style=flat-square) **Prisma ORM**
 - ![MySQL](https://img.shields.io/badge/-MySQL-4479A1?logo=mysql&logoColor=white&style=flat-square) **MySQL** *(ou adaptável para PostgreSQL / SQLite)*
 
+---
 
+## 📋 Pré-requisitos
+
+- Node.js (versão 16 ou superior)  
+- npm ou yarn  
+- Banco de dados MySQL (ou PostgreSQL / SQLite configurável)  
 
 ---
 
@@ -53,11 +57,14 @@ npm install
 
 ### 3. Configurar variáveis de ambiente
 
-Crie o arquivo `.env` na raiz com o conteúdo:
+Crie um arquivo `.env` na raiz do projeto com as variáveis abaixo (use como base o arquivo `.env.example`):
 
-```env
-DATABASE_URL="sqlite:./dev.db"  # ou PostgreSQL, MySQL etc
 ```
+DATABASE_URL="mysql://user:password@localhost:3306/database_name"
+PORT=4000
+```
+
+Altere as informações conforme seu ambiente.
 
 ### 4. Gerar o banco de dados
 
@@ -72,10 +79,8 @@ npm run dev
 ```
 
 A API estará disponível em:
-➡️ `http://localhost:4000/`
-Você poderá acessar o Playground do GraphQL diretamente nesse endereço.
-
----
+➡️ `http://localhost:4000/` (ou a porta configurada em `.env`)
+Você poderá acessar o Playground do GraphQL neste endereço.
 
 ## ✍️ Exemplos de Queries GraphQL
 
@@ -84,16 +89,16 @@ Você poderá acessar o Playground do GraphQL diretamente nesse endereço.
 ```graphql
 query {
   allAppointments {
-    AppointmentId
-    AppointmentDate
-    Doctor {
-      Name
+    appointmentId
+    appointmentDate
+    doctor {
+      name
     }
-    Patient {
-      Name
+    patient {
+      name
     }
-    Status {
-      Name
+    status {
+      name
     }
   }
 }
@@ -104,13 +109,13 @@ query {
 ```graphql
 mutation {
   createAppointment(input: {
-    AppointmentDate: "2025-05-25T14:00:00Z"
-    PatientId: 1
-    DoctorId: 2
-    StatusId: 1
+    appointmentDate: "2025-05-25T14:00:00Z"
+    patientId: 1
+    doctorId: 2
+    statusId: 1
   }) {
-    AppointmentId
-    AppointmentDate
+    appointmentId
+    appointmentDate
   }
 }
 ```
