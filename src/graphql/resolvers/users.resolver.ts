@@ -1,6 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+interface CreateUserInput {
+  PasswordHash: string;
+  UserTypeId: string;
+  StatusId: string;
+}
+
+interface UpdateUserInput {
+  PasswordHash?: string;
+  UserTypeId?: string;
+  StatusId?: string;
+}
 
 export const UsersResolvers = {
   Query: {
@@ -10,9 +20,50 @@ export const UsersResolvers = {
 
     user: async (_: any, args: { id: string }, context: { prisma: PrismaClient }) => {
       return context.prisma.users.findFirst({
-        where: { UserId: Number(args.id) }
+        where: { UserId: parseInt(args.id, 10) }
       });
     },
+  },
+
+  Mutation: {
+    createUser: async(_: any, args: { input: CreateUserInput }, context: { prisma: PrismaClient }) => {
+      const { PasswordHash, UserTypeId, StatusId } = args.input;
+
+      const UserTypeIdNum = parseInt(UserTypeId, 10);
+      const StatusIdNum = parseInt(StatusId, 10);
+
+      return context.prisma.users.create({
+        data: {
+          PasswordHash,
+          UserTypeId: UserTypeIdNum,
+          StatusId: StatusIdNum
+        }
+      });
+    },
+    updateUser: async(_: any, args: { id: string, input: UpdateUserInput }, context: { prisma: PrismaClient }) => {
+      const { PasswordHash, UserTypeId, StatusId } = args.input;
+
+      const UserTypeIdNum = UserTypeId ? parseInt(UserTypeId, 10) : undefined;
+      const StatusIdNum = StatusId ? parseInt(StatusId, 10) : undefined;
+
+      return context.prisma.users.update({
+        where: { UserId: parseInt(args.id, 10) },
+        data: {
+          PasswordHash,
+          UserTypeId: UserTypeIdNum,
+          StatusId: StatusIdNum
+        }
+      })
+    },
+    deleteUser: async(_: any, args: { id: string }, context: { prisma: PrismaClient }) => {
+      const UserIdNum = parseInt(args.id, 10);
+
+      await context.prisma.users.delete({
+        where: { UserId: UserIdNum }
+      })
+
+      return true
+    }
   },
 
   User: {

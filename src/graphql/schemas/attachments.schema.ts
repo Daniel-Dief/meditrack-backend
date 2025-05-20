@@ -14,8 +14,26 @@ export const AttachmentsSchema = gql`
         Consultation: Consultation!
     }
 
+    input CreateAttachmentInput {
+        ConsultationId: ID!
+        FilePath: String
+        FileType: String
+    }
+
+    input UpdateAttachmentInput {
+        ConsultationId: ID
+        FilePath: String
+        FileType: String
+    }
+
     extend type Query {
         allAttachments: [Attachment!]!
         attachment (id: ID!): Attachment
+    }
+
+    extend type Mutation {
+        createAttachment (input: CreateAttachmentInput!): Attachment!
+        updateAttachment (id: ID!, input: UpdateAttachmentInput!): Attachment!
+        deleteAttachment (id: ID!): Boolean!
     }
 `
