@@ -18,8 +18,32 @@ export const PatientsSchema = gql`
         Appointments: [Appointment!]!
     }
 
+    input CreatePatientInput {
+        Name: String!
+        Document: String!
+        BirthDate: DateTime
+        Gender: Boolean
+        Phone: String
+        UserId: ID!
+    }
+
+    input UpdatePatientInput {
+        Name: String
+        Document: String
+        BirthDate: DateTime
+        Gender: Boolean
+        Phone: String
+        UserId: ID
+    }
+
     extend type Query {
         allPatients: [Patient!]!
         patient (id: ID!): Patient
+    }
+
+    extend type Mutation {
+        createPatient(input: CreatePatientInput!): Patient!
+        updatePatient(id: ID!, input: UpdatePatientInput!): Patient!
+        deletePatient(id: ID!): Boolean!
     }
 `
