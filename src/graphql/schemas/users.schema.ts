@@ -17,8 +17,26 @@ export const UsersSchema = gql`
         Doctor: Doctor
     }
 
+    input CreateUserInput {
+        PasswordHash: String!
+        UserTypeId: ID!
+        StatusId: ID!
+    }
+
+    input UpdateUserInput {
+        PasswordHash: String
+        UserTypeId: ID
+        StatusId: ID
+    }
+
     extend type Query {
         allUsers: [User!]!
         user (id: ID!): User
+    }
+    
+    extend type Mutation {
+        createUser (input: CreateUserInput!): User!
+        updateUser (id: ID!, input: UpdateUserInput!): User!
+        deleteUser (id: ID!): Boolean!
     }
 `
