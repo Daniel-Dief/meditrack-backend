@@ -54,9 +54,10 @@ export const AppointmentResolvers = {
       });
     },
     deleteAppointment: async (_: any, args: { id: string }, context: { prisma: PrismaClient }) => {
-      return context.prisma.appointments.delete({
+      await context.prisma.appointments.delete({
         where: { AppointmentId: parseInt(args.id, 10) }
-      });
+      })
+      return true;
     }
   },
 

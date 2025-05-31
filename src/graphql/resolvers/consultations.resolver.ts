@@ -50,9 +50,10 @@ export const ConsultationResolvers = {
       });
     },
     deleteConsultation: async (_: any, args: { id: string }, context: { prisma: PrismaClient }) => {
-      return context.prisma.consultations.delete({
+      await context.prisma.consultations.delete({
         where: { ConsultationId: parseInt(args.id, 10) }
-      });
+      })
+      return true;
     }
   },
 

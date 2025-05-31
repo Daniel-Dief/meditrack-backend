@@ -56,9 +56,10 @@ export const DoctorsResolvers = {
       });
     },
     deleteDoctor: async(_: any, args: { id: string }, context: { prisma: PrismaClient }) => {
-      return context.prisma.doctors.delete({
+      await context.prisma.doctors.delete({
         where: { DoctorId: parseInt(args.id, 10) }
-      });
+      })
+      return true;
     }
   },
 

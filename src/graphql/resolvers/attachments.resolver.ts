@@ -48,9 +48,10 @@ export const AttachmentsResolvers = {
       });
     },
     deleteAttachment: async(_: any, args: { id: string }, context: { prisma: PrismaClient }) => {
-      return context.prisma.attachments.delete({
+      await context.prisma.attachments.delete({
         where: { AttachmentId: parseInt(args.id, 10) }
-      });
+      })
+      return true;
     }
   },
 
