@@ -5,6 +5,7 @@ export const UsersSchema = gql`
 
     type User {
         UserId: ID!
+        Login: String!
         PasswordHash: String!
         UserTypeId: ID!
         StatusId: ID!
