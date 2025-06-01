@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { createHash } from 'crypto';
 import { PrismaClient } from '@prisma/client';
 import decodeCredentials from '../../utils/decodeCredentials';
 
@@ -34,20 +35,26 @@ export const AuthResolver = {
           throw new Error('User not found');
         }
 
-        const token = jwt.sign(
+        const hashedPassword = createHash("md5").update(password).digest("hex").toUpperCase();
+        
+        if(user.PasswordHash === hashedPassword) {
+          const token = jwt.sign(
             { id: user.UserId.toString() },
             process.env.JWT_SECRET as string,
             { expiresIn: '1d' }
-        );
+          );
 
-        return {
-          user: {
-            UserId: user.UserId,
-            Login: user.Login,
-            Status: user.status.Name,
-            UserType: user.usertypes.Name
-          },
-          token: token
+          return {
+            user: {
+              UserId: user.UserId,
+              Login: user.Login,
+              Status: user.status.Name,
+              UserType: user.usertypes.Name
+            },
+            token: token
+          }
+        } else {
+          throw new Error('Invalid password');
         }
       }
   },

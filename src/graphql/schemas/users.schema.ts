@@ -19,13 +19,14 @@ export const UsersSchema = gql`
     }
 
     input CreateUserInput {
-        PasswordHash: String!
+        Login: String!
+        Password: String!
         UserTypeId: ID!
         StatusId: ID!
     }
 
     input UpdateUserInput {
-        PasswordHash: String
+        Password: String
         UserTypeId: ID
         StatusId: ID
     }
