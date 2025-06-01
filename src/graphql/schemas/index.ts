@@ -9,6 +9,8 @@ import { StatusSchema } from './status.schema';
 import { UsersSchema } from './users.schema';
 import { UserTypesSchema } from './usertypes.schema';
 
+import { AuthSchema } from './auth.schema';
+
 const baseSchema = gql`
     type Query {
         _empty: String
@@ -28,5 +30,6 @@ export const typeDefs = [
     PatientsSchema,
     StatusSchema,
     UsersSchema,
-    UserTypesSchema
+    UserTypesSchema,
+    AuthSchema
 ]
