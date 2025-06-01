@@ -77,7 +77,6 @@ export async function validateToken( { operation, authHeader} : Props ) : Promis
         message: "Token expirado"
       }
     } else {
-      console.log(error)
       return {
         status: false,
         message: "Token inválido"
