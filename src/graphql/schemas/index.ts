@@ -10,6 +10,7 @@ import { UsersSchema } from './users.schema';
 import { UserTypesSchema } from './usertypes.schema';
 
 import { AuthSchema } from './auth.schema';
+import { AccountSchema } from './account.schema';
 
 const baseSchema = gql`
     type Query {
@@ -31,5 +32,7 @@ export const typeDefs = [
     StatusSchema,
     UsersSchema,
     UserTypesSchema,
-    AuthSchema
+    
+    AuthSchema,
+    AccountSchema
 ]

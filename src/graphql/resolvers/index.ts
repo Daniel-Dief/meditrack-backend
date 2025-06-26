@@ -8,6 +8,7 @@ import { UsersResolvers } from './users.resolver';
 import { UserTypesResolvers } from './usertypes.resolver';
 
 import { AuthResolver } from './auth.resolver';
+import { AccountResolvers } from './account.resolver';
 
 export const resolvers = [
     AppointmentResolvers,
@@ -18,5 +19,7 @@ export const resolvers = [
     StatusResolvers,
     UsersResolvers,
     UserTypesResolvers,
-    AuthResolver
+
+    AuthResolver,
+    AccountResolvers
 ]
